@@ -16,9 +16,11 @@ The CSV file needs to have at least two rows named `url` for the base url and `r
 Usage: csv-to-redirect [options]
 
 Options:
-  -V, --version        output the version number
-  -i, --input <path>   Input CSV file (required)
-  -o, --output <path>  Output file name (default outputs to terminal)
-  -t, --type <type>    Output type [nginx, apache, vue] (required)
-  -h, --help           output usage information
+  -V, --version             output the version number
+  -i, --input <path>        Input CSV file (required)
+  -o, --output <path>       Output file name (Defaults to outputing to terminal)
+  -t, --type <type>         Output type [nginx, apache, vue] (required)
+  -s, --source <name>       Source cell name (default: "source")
+  -d, --destination <name>  Destination cell name (default: "destination")
+  -h, --help                output usage information
 ```

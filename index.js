@@ -10,8 +10,10 @@ let res = [];
 
 commander.version('0.0.1')
     .option('-i, --input <path>', 'Input CSV file', null)
-    .option('-o, --output <path>', 'Output file name', null)
-    .option('-t, --type <type>', 'Output type [nginx, apache, vue]', /^(nginx|apache|vue)$/i ,null)
+    .option('-o, --output <path>', 'Output file name (Defaults to outputing to terminal)', null)
+	.option('-t, --type <type>', 'Output type [nginx, apache, vue]', /^(nginx|apache|vue)$/i ,null)
+	.option('-s, --source <name>', 'Source cell name', 'source')
+	.option('-d, --destination <name>', 'Destination cell name', 'destination')
     .parse(process.argv);
 
 if (commander.input === null || commander.type === null) {
@@ -22,16 +24,16 @@ if (commander.input === null || commander.type === null) {
 
 let converted = [];
 
-function getVue(url, redir) {
-    return {path: url, redirect: redir};
+function getVue(source, destination) {
+    return {path: source, redirect: destination};
 }
 
-function getNginx(url, redir) {
-    return util.format("location = %s {\n\trewrite ^ %s permanent;\n}", url, redir);
+function getNginx(source, destination) {
+    return util.format("location = %s {\n\trewrite ^ %s permanent;\n}", source, destination);
 }
 
-function getApache(url, redir) {
-    return util.format("RedirectPermanent %s \t %s", url, redir);
+function getApache(source, destination) {
+    return util.format("RedirectPermanent %s \t %s", source, destination);
 }
 
 fs.createReadStream(commander.input)
@@ -39,25 +41,25 @@ fs.createReadStream(commander.input)
     .on('data', (data) => res.push(data))
     .on('end', () => {
 	res.forEach((item) => {
-	    if (!("url" in item) || !("redir" in item)) {
-		console.log("panic.jpg Malformed CSV (CSV needs to contain 'url' and 'redir' columns");
+	    if (!(commander.source in item) || !(commander.destination in item)) {
+		console.log(`panic.jpg! Malformed CSV. CSV needs to contain ${commander.source} and ${commander.destination} columns.`);
 		process.exit(1);
 	    }
-	    let parsedUrl = urlparse(encodeURI(decodeURI(item.url)));
-	    let parsedRedir = urlparse(encodeURI(decodeURI(item.redir)));
+	    let parsedSource = urlparse(encodeURI(decodeURI(item[commander.source])));
+	    let parsedDestination = urlparse(encodeURI(decodeURI(item[commander.destination])));
 	    
-	    let finalUrl = parsedUrl.pathname + parsedUrl.query;
-	    let finalRedir = parsedRedir.pathname + parsedRedir.query;
+	    let finalSource = parsedSource.pathname + parsedSource.query;
+	    let finalDestination = parsedDestination.pathname + parsedDestination.query;
 
 	    switch (commander.type) {
 	    case "vue":
-		converted.push(getVue(finalUrl, finalRedir));
+		converted.push(getVue(finalSource, finalDestination));
 		break;
 	    case "nginx":
-		converted.push(getNginx(finalUrl, finalRedir));
+		converted.push(getNginx(finalSource, finalDestination));
 		break;
 	    case "apache":
-		converted.push(getApache(finalUrl, finalRedir));
+		converted.push(getApache(finalSource, finalDestination));
 		break;
 	    }
 	    
@@ -72,7 +74,6 @@ fs.createReadStream(commander.input)
 	}
 	
 	if (commander.output === null) {
-	    console.log("-----------------TERMINAL OUTPUT------------------(use -o to specify an output file)");
 	    console.log(toWrite);
 	} else {
 	    fs.writeFile(commander.output, toWrite, (err, data) => {
