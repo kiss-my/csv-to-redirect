@@ -1,6 +1,6 @@
 {
   "name": "@kissmy/csv-to-redirect",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Converts a csv file to vue-router-redirects, apache and nginx redirects.",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
   "dependencies": {
     "commander": "^2.20.0",
     "csv-parser": "^2.2.0",
+    "javascript-stringify": "^2.0.0",
     "url-parse": "^1.4.4"
   },
   "bin": {

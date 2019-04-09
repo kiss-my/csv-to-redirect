@@ -4,6 +4,7 @@ const csv = require('csv-parser');
 const fs = require('fs');
 const util = require('util');
 const urlparse = require('url-parse');
+const jsstring = require('javascript-stringify');
 const commander = require('commander');
 
 let res = [];
@@ -49,7 +50,13 @@ fs.createReadStream(commander.input)
 	    let parsedDestination = urlparse(encodeURI(decodeURI(item[commander.destination])));
 	    
 	    let finalSource = parsedSource.pathname + parsedSource.query;
-	    let finalDestination = parsedDestination.pathname + parsedDestination.query;
+		let finalDestination = parsedDestination.pathname + parsedDestination.query;
+		if (finalDestination === "") {
+			finalDestination = "/";
+		}
+		if (finalSource === ""){
+			finalSource = "/";
+		}
 
 	    switch (commander.type) {
 	    case "vue":
@@ -68,7 +75,7 @@ fs.createReadStream(commander.input)
 	//console.log(converted);
 	let toWrite = "";
 	if (commander.type === "vue") {
-	    toWrite = JSON.stringify(converted, null, 4);
+	    toWrite = jsstring.stringify(converted, null, " ");
 	} else {
 	    toWrite = converted.join('\n');
 	}
