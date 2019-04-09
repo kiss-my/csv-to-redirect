@@ -31,5 +31,6 @@
   "bugs": {
     "url": "https://github.com/kiss-my/csv-to-redirect/issues"
   },
-  "homepage": "https://github.com/kiss-my/csv-to-redirect#readme"
+  "homepage": "https://github.com/kiss-my/csv-to-redirect#readme",
+  "private": false
 }
