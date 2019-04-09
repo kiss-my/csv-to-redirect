@@ -23,6 +23,9 @@
     "csv-parser": "^2.2.0",
     "url-parse": "^1.4.4"
   },
+  "bin": {
+    "csv-to-redirect": "./index.js"
+  },
   "author": "Seïfane Idouchach",
   "license": "WTFPL",
   "bugs": {
