@@ -30,7 +30,7 @@ function getVue(source, destination) {
 }
 
 function getNginx(source, destination) {
-    return util.format("%s\t%s", source, destination);
+    return util.format("%s\t%s;", source, destination);
 }
 
 function getApache(source, destination) {
