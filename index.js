@@ -30,7 +30,7 @@ function getVue(source, destination) {
 }
 
 function getNginx(source, destination) {
-    return util.format("location = %s {\n\trewrite ^ %s permanent;\n}", source, destination);
+    return util.format("%s\t%s", source, destination);
 }
 
 function getApache(source, destination) {
@@ -59,25 +59,32 @@ fs.createReadStream(commander.input)
 		}
 
 	    switch (commander.type) {
-	    case "vue":
-		converted.push(getVue(finalSource, finalDestination));
-		break;
-	    case "nginx":
-		converted.push(getNginx(finalSource, finalDestination));
-		break;
-	    case "apache":
-		converted.push(getApache(finalSource, finalDestination));
-		break;
+	    	case "vue":
+				converted.push(getVue(finalSource, finalDestination));
+				break;
+	    	case "nginx":
+				converted.push(getNginx(finalSource, finalDestination));
+				break;
+	    	case "apache":
+				converted.push(getApache(finalSource, finalDestination));
+				break;
 	    }
 	    
 	});
-	console.log("done");
-	//console.log(converted);
 	let toWrite = "";
-	if (commander.type === "vue") {
-	    toWrite = jsstring.stringify(converted, null, " ");
-	} else {
-	    toWrite = converted.join('\n');
+	switch (commander.type) {
+		case "vue":
+			toWrite = jsstring.stringify(converted, null, " ");
+			break;
+		case "nginx":
+			converted.push(getNginx("default", "0"));
+			toWrite = "map $request_uri $redirect {\n"
+						.concat(converted.join("\n"),
+						"\n}");
+			break;
+		case "apache":
+			toWrite = converted.join("\n");
+			break;
 	}
 	
 	if (commander.output === null) {
