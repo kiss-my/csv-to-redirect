@@ -1,6 +1,6 @@
 {
   "name": "@kissmy/csv-to-redirect",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Converts a csv file to vue-router-redirects, apache and nginx redirects.",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
   "bin": {
     "csv-to-redirect": "./index.js"
   },
-  "author": "Seïfane Idouchach",
+  "author": "Seïfane Idouchach @ KissMy",
   "license": "WTFPL",
   "bugs": {
     "url": "https://github.com/kiss-my/csv-to-redirect/issues"
