@@ -2,7 +2,7 @@
 
 Simple command line utility to convert a CSV to redirect files for Nginx, Apache and vue-router redirects.
 
-The CSV file needs to have at least two rows named `url` for the base url and `redir` for the redirect location.
+The CSV file needs to have at least two rows named `source` for the base url and `destination` for the redirect location.
 
 ## Install
 
